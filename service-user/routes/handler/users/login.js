@@ -4,16 +4,16 @@ const validator = require('fastest-validator');
 const v = new validator();
 
 module.exports = async (req, res) => {
+    // deklarasi rule
     const schema = {
-        name: 'string|empty:false',
         email: 'email|empty:false',
-        password: 'string|min:8',
-        profession: 'string|optional',
+        password: 'string|min:8'
     }
 
+    // validasi
     const validate = v.validate(req.body, schema);
-
-    // validate password length
+    
+    //validasi length
     if (validate.length) {
         return res.status(400).json({
             status: 'error',
@@ -21,33 +21,35 @@ module.exports = async (req, res) => {
         });
     }
 
+    // validasi akun
     const user = await User.findOne({
         where: { email: req.body.email }
     });
 
-    if (user) {
-        return res.status(409).json({
+    if (!user) {
+        return res.status(404).json({
             status: 'error',
-            message: 'email already exist'
+            message: 'User not found'
         });
     }
 
-    const password = await bcrypt.hash(req.body.password, 10);
+    const isValidPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!isValidPassword) {
+        return res.status(404).json({
+            status: 'error',
+            message: 'User not found'
+        });
+    }
 
-    const data = {
-        password,
-        name: req.body.name,
-        email: req.body.email,
-        profession: req.body.profession,
-        role: 'student'
-    };
-
-    const createdUser = await User.create(data);
-
-    return res.json({
+    res.json({
         status: 'success',
         data: {
-            id: createdUser.id
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            avatar: user.avatar,
+            profession: user.profession
         }
     });
 }

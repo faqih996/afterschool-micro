@@ -4,6 +4,7 @@ const isBase64 = require('is-base64');
 const base64Img = require('base64-img');
 const fs = require('fs');
 
+// model sequelize yang sudah dibuat
 const { Media } = require('../models');
 
 // API view all image
@@ -28,20 +29,25 @@ router.get('/', async(req, res) => {
 router.post('/', (req, res) => {
   const image = req.body.image;
 
+  // validasi image 
   if (!isBase64(image, { mimeRequired: true })) {
     return res.status(400).json({ status: 'error', message: 'invalid base64' });
   }
 
+  // vaidasi image dan merubah nama berdasarkan tanggal
   base64Img.img(image, './public/images', Date.now(), async (err, filepath) => {
     if (err) {
+      // cek jika error
       return res.status(400).json({ status: 'error', message: err.message });
     }
 
-    
+    // men generate filename dan memilih folder
     const filename = filepath.split("\\").pop().split("/").pop();
 
+    // upload image sesuai filename
     const media = await Media.create({ image: `images/${filename}` });
 
+    // memberikan informasi jika sukses
     return res.json({
       status: 'success',
       data: {
