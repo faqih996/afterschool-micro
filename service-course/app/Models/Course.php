@@ -10,7 +10,21 @@ class Course extends Model
     protected $table = 'courses';
 
     protected $fillable = [
-        'name', 'certificate', 'thumbnail', 'type', 'status', 'price', 'level', 'description', 'mentor_id'
+        'name',
+        'certificate',
+        'thumbnail',
+        'type',
+        'status',
+        'price',
+        'level',
+        'description',
+        'mentor_id'
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime::d-m-Y H:m:s',
+        'updated_at' => 'datetime::d-m-Y H:m:s',
+        'deleted_at' => 'datetime::d-m-Y H:m:s',
     ];
 
     public function mentor()
