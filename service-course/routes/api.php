@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MentorController;
 use App\Http\Controllers\CourseController;
+use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,3 +27,4 @@ Route::delete('mentors/{id}', [MentorController::class, 'destroy']);
 Route::post('courses', [CourseController::class, 'create']);
 Route::put('courses/{id}', [CourseController::class, 'update']);
 Route::get('courses', [CourseController::class, 'index']);
+Route::delete('courses/{id}', [CourseController::class, 'destroy']);
