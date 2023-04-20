@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('mentors', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('profile');
-            $table->string('email');
-            $table->string('profession');
+            $table->integer('user_id');
+            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $table->integer('rating')->default(1);
+            $table->longText('note')->nullable();
+            $table->unique(['course_id', 'user_id']);
             $table->timestamps();
-            $table->softdeletes();
+            $table->softDeletes();
         });
     }
 
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_mentors');
+        Schema::dropIfExists('reviews');
     }
 };
