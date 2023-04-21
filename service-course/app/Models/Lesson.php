@@ -12,4 +12,10 @@ class Lesson extends Model
     protected $fillable = [
         'name', 'video', 'chapter_id'
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime::d-m-Y H:m:s',
+        'updated_at' => 'datetime::d-m-Y H:m:s',
+        'deleted_at' => 'datetime::d-m-Y H:m:s',
+    ];
 }
