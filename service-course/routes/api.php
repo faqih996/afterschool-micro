@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\MentorController;
 use App\Http\Controllers\CourseController;
-use App\Models\Course;
+use App\Http\Controllers\ChapterController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +29,9 @@ Route::post('courses', [CourseController::class, 'create']);
 Route::put('courses/{id}', [CourseController::class, 'update']);
 Route::get('courses', [CourseController::class, 'index']);
 Route::delete('courses/{id}', [CourseController::class, 'destroy']);
+
+Route::get('chapters', [ChapterController::class, 'index']);
+Route::get('chapters/{id}', [ChapterController::class, 'show']);
+Route::post('chapters', [ChapterController::class, 'create']);
+Route::put('chapters/{id}', [ChapterController::class, 'update']);
+Route::delete('chapters/{id}', [ChapterController::class, 'destroy']);
