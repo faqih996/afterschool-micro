@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Mentor;
+use App\Models\Review;
+use App\Models\MyCourse;
+use App\Models\Chapter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,6 +37,62 @@ class CourseController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $courses->paginate(10)
+        ]);
+    }
+
+    public function show($id)
+    {
+        // mencari data course
+        // chapters.lessons karna di model chapters terhubung ke lessons
+        // juga mengambil dari relation di model yaitu mentor dan images
+        $course = Course::with('chapters.lessons')
+            ->with('mentor')
+            ->with('images')
+            ->find($id);
+
+        // jika tidak ada memberi respons 404
+        if (!$course) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'course not found'
+            ]);
+        }
+
+        // mengambil review dari data ini
+        $reviews = Review::where('course_id', '=', $id)->get()->toArray();
+
+        // jika tidak ada review
+        if (count($reviews) > 0) {
+            $userIds = array_column($reviews, 'user_id');
+            $users = getUserByIds($userIds);
+            // menampilkan error kosong jika service user down
+            if ($users['status'] === 'error') {
+                $reviews = [];
+            } else {
+                // jika server berjalan tampilkan data user
+                foreach ($reviews as $key => $review) {
+                    // combine user id di service user dan di data, supaya tampil nama
+                    $userIndex = array_search($review['user_id'], array_column($users['data'], 'id'));
+                    // jika sudah ketemu maka menampilkan data
+                    $reviews[$key]['users'] = $users['data'][$userIndex];
+                }
+            }
+        }
+
+        // menghitung total user yang mengikuti course ini
+        $totalStudent = MyCourse::where('course_id', '=', $id)->count();
+        // mengambil jumlah total video materi yang ada di lessons, dipanggil melalui chapther
+        $totalVideos = Chapter::where('course_id', '=', $id)->withCount('lessons')->get()->toArray();
+        // menghitung total jumlah video dengan array_sum, jika tidak akan terbagi berdasaar chapter
+        $finalTotalVideos = array_sum(array_column($totalVideos, 'lessons_count'));
+
+        $course['reviews'] = $reviews;
+        $course['total_videos'] = $finalTotalVideos;
+        $course['total_student'] = $totalStudent;
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $course
         ]);
     }
 

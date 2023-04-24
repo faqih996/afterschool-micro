@@ -18,10 +18,10 @@ class ChapterController extends Controller
         $chapters = Chapter::query();
 
         // filter data berdasarkan relation 
-        $courseId = $request->query('courses_id');
+        $courseId = $request->query('course_id');
 
         $chapters->when($courseId, function ($query) use ($courseId) {
-            return $query->where('courses_id', '=', $courseId);
+            return $query->where('course_id', '=', $courseId);
         });
 
         // kirim response
@@ -54,7 +54,7 @@ class ChapterController extends Controller
         // request
         $rules = [
             'name' => 'required|string',
-            'courses_id' => 'required|integer'
+            'course_id' => 'required|integer'
         ];
 
         // ambil inputan berdasarkan rule
@@ -72,7 +72,7 @@ class ChapterController extends Controller
         }
 
         // memasukan course id
-        $courseId = $request->input('courses_id');
+        $courseId = $request->input('course_id');
         $course = Course::find($courseId);
 
         // jikda data course tidak ada

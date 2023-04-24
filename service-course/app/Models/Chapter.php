@@ -10,7 +10,7 @@ class Chapter extends Model
     protected $table = 'chapters';
 
     protected $fillable = [
-        'name', 'courses_id'
+        'name', 'course_id'
     ];
 
     protected $casts = [
