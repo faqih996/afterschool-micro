@@ -5,6 +5,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\ImageCourseController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\MyCourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,3 +46,6 @@ Route::delete('lessons/{id}', [LessonController::class, 'destroy']);
 
 Route::post('image-courses', [ImageCourseController::class, 'create']);
 Route::delete('image-courses/{id}', [ImageCourseController::class, 'destroy']);
+
+Route::get('my-courses', [MyCourseController::class, 'index']);
+Route::post('my-courses', [MyCourseController::class, 'create']);

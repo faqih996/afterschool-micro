@@ -13,8 +13,14 @@ class MyCourse extends Model
         'course_id', 'user_id'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime::d-m-Y H:m:s',
+        'updated_at' => 'datetime::d-m-Y H:m:s',
+        'deleted_at' => 'datetime::d-m-Y H:m:s',
+    ];
+
     public function course()
     {
-        return $this->belongsTo('App\Course');
+        return $this->belongsTo('App\Models\Course');
     }
 }
