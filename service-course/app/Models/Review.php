@@ -13,6 +13,12 @@ class Review extends Model
         'user_id', 'course_id', 'rating', 'note'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime::d-m-Y H:m:s',
+        'updated_at' => 'datetime::d-m-Y H:m:s',
+        'deleted_at' => 'datetime::d-m-Y H:m:s',
+    ];
+
     public function course()
     {
         return $this->belongsTo('App\ModelsCourse');
