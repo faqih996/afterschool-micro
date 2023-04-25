@@ -1,7 +1,7 @@
 const apiAdapter = require('../../apiAdapter');
 const {
     URL_SERVICE_COURSE,
-    HOSTNAME
+    HOSTNAME1
 } = process.env;
 
 const api = apiAdapter(URL_SERVICE_COURSE);
@@ -20,8 +20,8 @@ module.exports = async (req, res) => {
         const firstPage = coursesData.data.first_page_url.split('?').pop();
         const lastPage = coursesData.data.last_page_url.split('?').pop();
         
-        coursesData.data.first_page_url = `${HOSTNAME}/courses?${firstPage}`;
-        coursesData.data.last_page_url = `${HOSTNAME}/courses?${lastPage}`;
+        coursesData.data.first_page_url = `${HOSTNAME1}/courses?${firstPage}`;
+        coursesData.data.last_page_url = `${HOSTNAME1}/courses?${lastPage}`;
 
         if (coursesData.data.next_page_url) {
             const nextPage = coursesData.data.next_page_url.split('?').pop();
