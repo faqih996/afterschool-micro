@@ -96,7 +96,7 @@ class ChapterController extends Controller
         // request
         $rules = [
             'name' => 'required|string',
-            'courses_id' => 'required|integer'
+            'course_id' => 'required|integer'
         ];
 
         // ambil inputan berdasarkan rule
