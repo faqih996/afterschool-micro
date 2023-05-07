@@ -79,7 +79,9 @@ class MyCourseController extends Controller
             ], 409);
         }
 
+        // mengecek jika course premium
         if ($course->type === 'premium') {
+            // jika course premium maka harga tidak bisa kosong
             if ($course->price === 0) {
                 return response()->json([
                     'status' => 'error',
@@ -87,11 +89,13 @@ class MyCourseController extends Controller
                 ], 405);
             }
 
+            // postOrder berasal dari helper yang berada di providers
             $order = postOrder([
                 'user' => $user['data'],
                 'course' => $course->toArray()
             ]);
 
+            // jika ada error atau beum dibayarkan maka menampilkan error
             if ($order['status'] === 'error') {
                 return response()->json([
                     'status' => $order['status'],
@@ -99,10 +103,13 @@ class MyCourseController extends Controller
                 ], $order['http_code']);
             }
 
+            // jika tidak ada kendala maka langsung berikan pesan sukses dan data
             return response()->json([
                 'status' => $order['status'],
                 'data' => $order['data']
             ]);
+
+            // jika tidak premium
         } else {
             // mengirimkan data 
             $myCourse = MyCourse::create($data);
