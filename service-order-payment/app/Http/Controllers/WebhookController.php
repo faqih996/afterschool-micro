@@ -39,7 +39,6 @@ class WebhookController extends Controller
         // mencari order id
         $order = Order::find($realOrderId[0]);
         echo $realOrderId[0];
-
         // jika order tidak ada maka akan not found
         if (!$order) {
             return response()->json([
